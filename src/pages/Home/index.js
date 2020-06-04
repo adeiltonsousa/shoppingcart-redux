@@ -1,146 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { formatPrice } from '../../util/format';
 import { MdAddShoppingCart } from 'react-icons/md';
+
+import api from '../../services/api';
 
 import { ProductList } from './styles';
 
-export default function Home() {
-	return (
-		<ProductList>
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
+export default class Home extends Component {
+	state = {
+		products: [],
+	};
 
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="#FFF" />3
-					</div>
+	async componentDidMount() {
+		const response = await api.get('products');
 
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
+		const data = response.data.map((product) => ({
+			...product,
+			priceFormatted: formatPrice(product.price),
+		}));
 
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
+		this.setState({ products: data });
+	}
 
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
+	render() {
+		const { products } = this.state;
+		return (
+			<ProductList>
+				{products.map((product) => (
+					<li key={product.id}>
+						<img src={product.image} alt={product.title} />
+						<strong>{product.title}</strong>
+						<span>{product.priceFormatted}</span>
 
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
+						<button type="button">
+							<div>
+								<MdAddShoppingCart sixe={16} color="#FFF" />3
+							</div>
 
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-
-			<li>
-				<img
-					src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-					alt="Tẽnis"
-				/>
-				<strong>Desc. Produto</strong>
-				<span>R$ 679,90</span>
-
-				<button type="button">
-					<div>
-						<MdAddShoppingCart sixe={16} color="FFF" />3
-					</div>
-
-					<span>ADICIONAR AO CARRINHO</span>
-				</button>
-			</li>
-		</ProductList>
-	);
+							<span>ADICIONAR AO CARRINHO</span>
+						</button>
+					</li>
+				))}
+			</ProductList>
+		);
+	}
 }
