@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
 	MdRemoveCircleOutline,
 	MdAddCircleOutline,
@@ -7,7 +8,7 @@ import {
 
 import { Container, ProductTable, Total } from './styles';
 
-export default function Cart() {
+function Cart({ cart }) {
 	return (
 		<Container>
 			<ProductTable>
@@ -21,43 +22,46 @@ export default function Cart() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>
-							<img
-								src="https://static.netshoes.com.br/produtos/tenis-olympikus-blend-masculino/06/D22-2924-206/D22-2924-206_zoom1.jpg?ts=1589968694&ims=544x"
-								alt="Tênis"
-							/>
-						</td>
-						<td>
-							<strong>Desc. do Produto</strong>
-							<span>R$ 156,89</span>
-						</td>
-						<td>
-							<div>
-								<button type="button">
-									<MdAddCircleOutline
-										sixe={20}
-										color="SpringGreen"
+					{cart.map((product) => (
+						<tr>
+							<td>
+								<img src={product.image} alt={product.title} />
+							</td>
+							<td>
+								<strong>{product.title}</strong>
+								<span>{product.priceFormatted}</span>
+							</td>
+							<td>
+								<div>
+									<button type="button">
+										<MdAddCircleOutline
+											sixe={20}
+											color="SpringGreen"
+										/>
+									</button>
+									<input
+										type="number"
+										readOnly
+										value={product.amount}
 									/>
-								</button>
-								<input type="number" readOnly value={1} />
+									<button type="button">
+										<MdRemoveCircleOutline
+											sixe={20}
+											color="SpringGreen"
+										/>
+									</button>
+								</div>
+							</td>
+							<td>
+								<strong>R$ 258,80</strong>
+							</td>
+							<td>
 								<button type="button">
-									<MdRemoveCircleOutline
-										sixe={20}
-										color="SpringGreen"
-									/>
+									<MdDelete sixe={20} color="SpringGreen" />
 								</button>
-							</div>
-						</td>
-						<td>
-							<strong>R$ 258,80</strong>
-						</td>
-						<td>
-							<button type="button">
-								<MdDelete sixe={20} color="SpringGreen" />
-							</button>
-						</td>
-					</tr>
+							</td>
+						</tr>
+					))}
 				</tbody>
 			</ProductTable>
 
@@ -72,3 +76,8 @@ export default function Cart() {
 		</Container>
 	);
 }
+const mapStateToProps = (state) => ({
+	cart: state.cart,
+});
+
+export default connect(mapStateToProps)(Cart);
