@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-import background from '../assets/images/background.svg';
+import background from '../assets/images/Zig-Zag.svg';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-	background: #191920 url(${background}) no-repeat center top;
+	background: #008080 url(${background}) repeat center top;
 	-webkit-font-smoothing: antialiased;
   }
 

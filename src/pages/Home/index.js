@@ -1,27 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { formatPrice } from '../../util/format';
-import { MdAddShoppingCart } from 'react-icons/md';
+import { MdShoppingCart } from 'react-icons/md';
+
+import md5 from 'md5';
 import api from '../../services/api';
 import * as CartActions from '../../store/modules/cart/actions';
+import semImagem from '../../assets/images/no-image.jpg';
+import seloPromocao from '../../assets/images/logo_promocao.png';
 
 import { ProductList } from './styles';
 
 class Home extends Component {
 	state = {
 		products: [],
+		sizeSelect: '',
 	};
 
 	async componentDidMount() {
-		const response = await api.get('products');
+		const response = await api.get();
 
 		const data = response.data.map((product) => ({
 			...product,
-			priceFormatted: formatPrice(product.price),
+			id: md5(product.image),
+			regular_price: parseFloat(product.regular_price.replace('R$ ', '')),
+			actual_price: parseFloat(product.actual_price.replace('R$ ', '')),
+			sizeSelect: '',
 		}));
-
 		this.setState({ products: data });
+		console.log(this.state.products[2]);
 	}
 
 	handleAddProduct = (product) => {
@@ -30,24 +37,77 @@ class Home extends Component {
 		addToCart(product);
 	};
 
+	handleSize(event) {
+		let newSelect = event.target.value;
+		console.log(newSelect);
+	}
+
 	render() {
 		const { products } = this.state;
 		const { amount } = this.props;
-
+		console.log(products);
 		return (
 			<ProductList>
 				{products.map((product) => (
 					<li key={product.id}>
-						<img src={product.image} alt={product.title} />
-						<strong>{product.title}</strong>
-						<span>{product.priceFormatted}</span>
+						<div>
+							{product.on_sale === true ? (
+								<p>
+									<img
+										src={seloPromocao}
+										alt="Selo de Promoção"
+									/>
+								</p>
+							) : (
+								''
+							)}
+						</div>
+						<img
+							src={product.image || semImagem}
+							alt={product.name}
+						/>
+						<strong>{product.name}</strong>
+						<span>
+							{product.on_sale === true ? (
+								<div>
+									<p>R$ {product.regular_price}</p>
+									<span>
+										<p>
+											Desconto: R$
+											{product.discount_percentage}
+										</p>
+										R$ {product.actual_price}
+									</span>
+								</div>
+							) : (
+								<span>R$ {product.regular_price}</span>
+							)}
 
+							<p>ou {product.installments}</p>
+						</span>
+						<div>
+							Tamanhos:
+							<select onChange={this.handleSize}>
+								{product.sizes.map((tamSelect) =>
+									tamSelect.available === true ? (
+										<option
+											key={tamSelect.size}
+											value={tamSelect.size}
+										>
+											{tamSelect.size}
+										</option>
+									) : (
+										''
+									)
+								)}
+							</select>
+						</div>
 						<button
 							type="button"
 							onClick={() => this.handleAddProduct(product)}
 						>
 							<div>
-								<MdAddShoppingCart size={16} color="#FFF" />
+								<MdShoppingCart size={16} color="#FFF" />
 								{amount[product.id] || 0}
 							</div>
 

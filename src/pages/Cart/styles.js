@@ -13,7 +13,7 @@ export const Container = styled.div`
 		align-items: center;
 
 		button {
-			background: SpringGreen;
+			background: #276955;
 			color: #fff;
 			border: 0;
 			border-radius: 4px;
@@ -23,7 +23,7 @@ export const Container = styled.div`
 			transition: background 0.2s;
 
 			&:hover {
-				background: ${darken(0.09, 'SpringGreen')};
+				background: ${darken(0.09, '#276955')};
 			}
 		}
 	}

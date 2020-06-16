@@ -6,6 +6,10 @@ export const Container = styled.header`
 	justify-content: space-between;
 	align-items: center;
 	margin: 50px 0;
+
+	img {
+		width: 150px;
+	}
 `;
 
 export const Cart = styled(Link)`
@@ -24,12 +28,12 @@ export const Cart = styled(Link)`
 
 		strong {
 			display: block;
-			color: #fff;
+			color: #276955;
 		}
 
 		span {
 			font-size: 12px;
-			color: #999;
+			color: #276955;
 		}
 	}
 `;

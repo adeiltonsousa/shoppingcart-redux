@@ -1,13 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import {
-	MdRemoveCircleOutline,
-	MdAddCircleOutline,
-	MdDelete,
+	MdAdd,
+	MdRemove,
+	MdDeleteForever,
+	MdKeyboardBackspace,
 } from 'react-icons/md';
 import * as CartActions from '../../store/modules/cart/actions';
 import { formatPrice } from '../../util/format';
+import semImagem from '../../assets/images/no-image.jpg';
 
 import { Container, ProductTable, Total } from './styles';
 
@@ -23,6 +26,9 @@ function Cart({ cart, removeFromCart, updateAmount, total }) {
 	return (
 		<Container>
 			<ProductTable>
+				<Link to="/">
+					<MdKeyboardBackspace size={25} color="#276955" />
+				</Link>
 				<thead>
 					<tr>
 						<th />
@@ -34,13 +40,16 @@ function Cart({ cart, removeFromCart, updateAmount, total }) {
 				</thead>
 				<tbody>
 					{cart.map((product) => (
-						<tr>
+						<tr key={product.id}>
 							<td>
-								<img src={product.image} alt={product.title} />
+								<img
+									src={product.image || semImagem}
+									alt={product.name}
+								/>
 							</td>
 							<td>
-								<strong>{product.title}</strong>
-								<span>{product.priceFormatted}</span>
+								<strong>{product.name}</strong>
+								<span>{product.valueUnit}</span>
 							</td>
 							<td>
 								<div>
@@ -48,10 +57,7 @@ function Cart({ cart, removeFromCart, updateAmount, total }) {
 										type="button"
 										onClick={() => decrement(product)}
 									>
-										<MdRemoveCircleOutline
-											sixe={20}
-											color="SpringGreen"
-										/>
+										<MdRemove size={25} color="#276955" />
 									</button>
 									<input
 										type="number"
@@ -62,10 +68,7 @@ function Cart({ cart, removeFromCart, updateAmount, total }) {
 										type="button"
 										onClick={() => increment(product)}
 									>
-										<MdAddCircleOutline
-											sixe={20}
-											color="SpringGreen"
-										/>
+										<MdAdd size={25} color="#276955" />
 									</button>
 								</div>
 							</td>
@@ -77,7 +80,10 @@ function Cart({ cart, removeFromCart, updateAmount, total }) {
 									type="button"
 									onClick={() => removeFromCart(product.id)}
 								>
-									<MdDelete sixe={20} color="SpringGreen" />
+									<MdDeleteForever
+										size={25}
+										color="#276955"
+									/>
 								</button>
 							</td>
 						</tr>
@@ -99,11 +105,23 @@ function Cart({ cart, removeFromCart, updateAmount, total }) {
 const mapStateToProps = (state) => ({
 	cart: state.cart.map((product) => ({
 		...product,
-		subtotal: formatPrice(product.price * product.amount),
+		valueUnit: formatPrice(
+			product.on_sale === true
+				? product.actual_price
+				: product.regular_price
+		),
+
+		subtotal: formatPrice(
+			product.on_sale === true
+				? product.actual_price * product.amount
+				: product.regular_price * product.amount
+		),
 	})),
 	total: formatPrice(
 		state.cart.reduce((total, product) => {
-			return total + product.price * product.amount;
+			return product.on_sale === true
+				? total + product.actual_price * product.amount
+				: total + product.regular_price * product.amount;
 		}, 0)
 	),
 });
