@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-	background: #008080 url(${background}) repeat center top;
+	background: url(${background}) repeat center top;
 	-webkit-font-smoothing: antialiased;
   }
 

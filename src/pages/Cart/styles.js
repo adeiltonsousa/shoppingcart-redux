@@ -30,12 +30,19 @@ export const Container = styled.div`
 `;
 
 export const ProductTable = styled.table`
-	width: 100%;
+	width: 100vw;
+
+	@media (max-width: 450px) {
+		display: none;
+	}
 
 	thead th {
 		color: #999;
 		text-align: left;
 		padding: 12px;
+		@media (max-width: 450px) {
+			display: none;
+		}
 	}
 
 	tbody td {

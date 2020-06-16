@@ -28,7 +28,6 @@ class Home extends Component {
 			sizeSelect: '',
 		}));
 		this.setState({ products: data });
-		console.log(this.state.products[2]);
 	}
 
 	handleAddProduct = (product) => {
@@ -37,15 +36,9 @@ class Home extends Component {
 		addToCart(product);
 	};
 
-	handleSize(event) {
-		let newSelect = event.target.value;
-		console.log(newSelect);
-	}
-
 	render() {
 		const { products } = this.state;
 		const { amount } = this.props;
-		console.log(products);
 		return (
 			<ProductList>
 				{products.map((product) => (
@@ -87,7 +80,7 @@ class Home extends Component {
 						</span>
 						<div>
 							Tamanhos:
-							<select onChange={this.handleSize}>
+							<select>
 								{product.sizes.map((tamSelect) =>
 									tamSelect.available === true ? (
 										<option
